@@ -1,305 +1,79 @@
+# ScanCV — AI Resume Analyzer
 
-```markdown
-# 📄 Resume Screening & Job Recommendation System
+A production-ready AI resume analyzer: upload a PDF resume, paste a job description, and get an
+ATS score, JD match %, missing keywords/skills, grammar suggestions, strengths/weaknesses,
+recommended certifications & projects, and likely interview questions — all in one dashboard.
 
-An AI-based Resume Screening and Job Recommendation System built using Python, Streamlit, and Natural Language Processing (NLP).
+## Tech Stack
 
-The system analyzes a candidate's resume, extracts skills, compares them with available job requirements, calculates a job-match score, recommends suitable jobs, and provides resume improvement suggestions.
+- React 19 + TypeScript + Vite
+- Tailwind CSS
+- React Router
+- React Hook Form + Zod
+- Framer Motion
+- Recharts
+- pdfjs-dist (client-side PDF text extraction)
+- OpenRouter API (LLM analysis)
 
-## 🚀 Features
-
-- 📄 Upload resumes in PDF or DOCX format
-- 📖 Extract text from resumes
-- 🧠 Automatically extract candidate skills
-- ⚖️ Weighted skill matching
-- 📝 TF-IDF text similarity
-- 🤖 Calculate final AI job-match score
-- 💼 Recommend suitable jobs
-- 🟢 Display matched skills
-- 🔴 Display missing skills
-- 💪 Identify resume strengths
-- 📚 Identify skills to improve
-- 💡 Generate resume improvement suggestions
-- 📊 Visualize job-match scores
-- 🌐 Interactive Streamlit web interface
-
-## 🛠️ Technologies Used
-
-- Python
-- Streamlit
-- Scikit-learn
-- Pandas
-- pypdf
-- python-docx
-- Regular Expressions (Regex)
-- TF-IDF
-- Cosine Similarity
-
-## 🧠 How It Works
-
-```text
-Resume Upload
-      ↓
-Resume Text Extraction
-      ↓
-Skill Extraction
-      ↓
-Weighted Skill Matching
-      ↓
-TF-IDF Text Similarity
-      ↓
-Final Match Score
-      ↓
-Job Recommendation
-      ↓
-Resume Insights
-```
-
-## 🤖 AI Matching Methodology
-
-The system uses two main techniques.
-
-### 1. Weighted Skill Matching
-
-The candidate's extracted skills are compared with the skills required for each job.
-
-Different skills have different weights based on their importance.
-
-### 2. TF-IDF Text Similarity
-
-TF-IDF (Term Frequency-Inverse Document Frequency) converts the resume and job description into numerical vectors.
-
-Cosine similarity is then used to measure the similarity between the resume and job description.
-
-### 3. Final Match Score
-
-The final score combines both methods:
-
-```text
-Final Score =
-(70% × Skill Score) +
-(30% × TF-IDF Text Similarity)
-```
-
-## 📂 Project Structure
-
-```text
-Resume_Job_Description/
-│
-├── app.py
-├── resume_parser.py
-├── skill_extractor.py
-├── skill_weights.py
-├── jobs.py
-├── job_matcher.py
-├── tfidf_matcher.py
-├── final_matcher.py
-├── resume_insights.py
-│
-├── test_parser.py
-├── test_jobs.py
-├── test_matching.py
-├── test_weights.py
-├── test_tfidf.py
-├── test_final.py
-├── test_insights.py
-│
-├── requirements.txt
-├── .gitignore
-└── README.md
-```
-
-## 📌 Main Modules
-
-### `app.py`
-
-Main Streamlit application that provides the user interface and connects all modules.
-
-### `resume_parser.py`
-
-Extracts text from PDF and DOCX resumes.
-
-### `skill_extractor.py`
-
-Detects technical and professional skills from the extracted resume text.
-
-### `skill_weights.py`
-
-Contains weights assigned to different skills for job matching.
-
-### `jobs.py`
-
-Contains job descriptions, companies, locations, and required skills.
-
-### `tfidf_matcher.py`
-
-Calculates text similarity between the resume and job descriptions using TF-IDF and cosine similarity.
-
-### `final_matcher.py`
-
-Combines weighted skill matching and TF-IDF similarity to calculate the final job-match score.
-
-### `resume_insights.py`
-
-Generates resume strengths, missing skills, and improvement suggestions.
-
-## 💻 Installation
-
-### 1. Clone the repository
+## Getting Started
 
 ```bash
-git clone https://github.com/Hassan-13-2006/resume-screening-job-recommendation.git
+npm install
+cp .env.example .env
+# edit .env and add your OpenRouter API key
+npm run dev
 ```
 
-### 2. Open the project folder
+The app runs at `http://localhost:5173`.
+
+## Environment Variables
+
+Create a `.env` file (see `.env.example`):
+
+```
+VITE_OPENROUTER_API_KEY=your_openrouter_api_key_here
+VITE_OPENROUTER_MODEL=anthropic/claude-3.5-sonnet
+```
+
+Get an API key at https://openrouter.ai/keys. You can swap `VITE_OPENROUTER_MODEL` for any
+model available on OpenRouter (e.g. `openai/gpt-4o-mini`, `google/gemini-1.5-pro`).
+
+> **Note:** This app calls the OpenRouter API directly from the browser using a `VITE_` env
+> variable, which means the key is exposed client-side. This is fine for local use, demos, and
+> personal projects. For a public production deployment, put the OpenRouter call behind a small
+> serverless function (e.g. a Vercel API route) so the key stays server-side.
+
+## Project Structure
+
+```
+src/
+  components/
+    layout/      Navbar, Footer, ThemeToggle
+    ui/           Button, Card, Badge, ProgressBar, ScoreGauge, Spinner
+    upload/       ResumeUploader, JobDescriptionInput
+    dashboard/    All result panels (scores, skills, keywords, grammar, etc.)
+  context/         ThemeContext (dark/light mode)
+  hooks/           useResumeAnalysis (PDF parsing + AI analysis orchestration)
+  lib/             pdfParser.ts, openrouter.ts, utils.ts
+  pages/           LandingPage, AnalyzePage, DashboardPage, NotFoundPage
+  types/           Shared TypeScript types
+```
+
+## Build
 
 ```bash
-cd resume-screening-job-recommendation
+npm run build
+npm run preview
 ```
 
-### 3. Create a virtual environment
+## Deploy to Vercel
 
-```bash
-python -m venv venv
-```
+1. Push this repo to GitHub.
+2. Import the project in Vercel.
+3. Add the environment variables (`VITE_OPENROUTER_API_KEY`, `VITE_OPENROUTER_MODEL`) in the
+   Vercel project settings.
+4. Deploy — the included `vercel.json` handles SPA routing rewrites.
 
-### 4. Activate the virtual environment
+## License
 
-#### Windows
-
-```powershell
-venv\Scripts\activate
-```
-
-#### Linux/macOS
-
-```bash
-source venv/bin/activate
-```
-
-### 5. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-## ▶️ Run the Application
-
-Run:
-
-```bash
-streamlit run app.py
-```
-
-The application will open in your browser.
-
-## 📄 How to Use
-
-1. Open the application.
-2. Upload your resume in PDF or DOCX format.
-3. Click **Analyze Resume**.
-4. The system extracts the resume text.
-5. Skills are automatically detected.
-6. The resume is compared with available jobs.
-7. Match scores are calculated.
-8. Recommended jobs are displayed.
-9. Matched and missing skills are shown.
-10. Resume strengths and improvement suggestions are generated.
-
-## 📊 Example Output
-
-```text
-Job: Frontend Developer
-
-Final AI Match: 56.33%
-Skill Score: 73.33%
-Text Similarity: 16.68%
-
-Matched Skills:
-HTML
-CSS
-JavaScript
-Git
-GitHub
-
-Missing Skills:
-React
-```
-
-The actual results depend on the resume uploaded by the user.
-
-## 🎯 Objectives
-
-- Automate basic resume screening.
-- Reduce manual job-search effort.
-- Match candidate skills with job requirements.
-- Identify missing skills.
-- Recommend suitable jobs.
-- Provide resume improvement suggestions.
-
-## ✅ Advantages
-
-- Simple and easy to use
-- Fast resume analysis
-- Supports PDF and DOCX resumes
-- Provides explainable matching results
-- Shows matched and missing skills
-- Provides resume improvement suggestions
-- Runs locally
-- Does not require an external AI API
-
-## ⚠️ Limitations
-
-- Skill extraction depends on the predefined skill database.
-- The system may not recognize completely new or unusual skill names.
-- Job data is currently predefined.
-- TF-IDF mainly measures textual similarity and does not fully understand semantic meaning.
-- The current system does not use a large language model or transformer-based model.
-
-## 🔮 Future Scope
-
-The project can be improved by adding:
-
-- Transformer-based NLP models
-- Semantic embeddings
-- Larger real-world job databases
-- Automatic job-data collection
-- Resume section analysis
-- Experience-level detection
-- Education matching
-- Personalized learning recommendations
-- More advanced resume scoring
-- Deployment as a public web application
-
-## 🎓 Project Information
-
-**Project Type:** Academic AI & NLP Project
-
-**Domain:**
-- Artificial Intelligence
-- Natural Language Processing
-- Machine Learning
-- Resume Screening
-- Job Recommendation
-
-## 🌐 Live Demo
-
-🚀 **Try the live application:**
-
-https://resume-screening-job-recommendation-xvqv4uepzzwtzrlecdc6cw.streamlit.app/
-
-💻 **GitHub Repository:**
-
-https://github.com/Hassan-13-2006/resume-screening-job-recommendation
-
-## 👨‍💻 Author
-
-**Khan Mohd Hassan Mohd Saeed**
-
-GitHub:  
-https://github.com/Hassan-13-2006
-
-## 📜 License
-
-This project is developed for educational and academic purposes.
-
+MIT

@@ -1,21 +1,8 @@
-# Virtual environment
-venv/
-
-# Python cache
-__pycache__/
-*.pyc
-
-# Personal/uploaded resumes
-uploaded_resume.*
-resumes/
-
-# Temporary files
-*.tmp
-*.temp
-
-# Streamlit secrets
-.streamlit/secrets.toml
-
-# OS files
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.env.local
 .DS_Store
-Thumbs.db
+*.log
